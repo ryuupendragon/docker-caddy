@@ -68,9 +68,9 @@ jobs:
             ghcr.io/${{ github.actor }}/caddy-${{ matrix.variant.name }}
             ${{ vars.DOCKERHUB_USERNAME }}/caddy-${{ matrix.variant.name }}
           tags: |
-            type=raw,value=latest
             type=raw,value=${{ steps.version.outputs.version }}
             type=sha,format=long,prefix=sha-
+            type=raw,value=latest
       - 
         name: Build and push
         uses: docker/build-push-action@v6.18.0
