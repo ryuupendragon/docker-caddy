@@ -54,8 +54,7 @@ jobs:
             ghcr.io/${{ github.actor }}/caddy-${{ matrix.variant.name }}
           tags: |
             type=raw,value=latest
-            type=ref,event=branch
-            type=ref,event=tag
+            type=raw,value=${{ env.VERSION }}
             type=sha,format=long,prefix=sha-
 
       - name: Build and push
