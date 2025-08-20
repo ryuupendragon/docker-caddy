@@ -17,4 +17,4 @@ jobs:
         run: echo "VERSION=$(grep -Eo 'caddy:[0-9]+\.[0-9]+\.[0-9]+$' caddy-cloudflare/Dockerfile | cut -d ':' -f2)"  >> $GITHUB_ENV
       -
         name: Print
-        run: echo env.VERSION
+        run: echo ${{ env.VERSION }}
