@@ -51,7 +51,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ghcr.io/${{ github.repository }}/caddy-${{ matrix.variant.name }}
+            ghcr.io/${{ github.actor }}/caddy-${{ matrix.variant.name }}
           tags: |
             type=raw,value=latest
             type=ref,event=branch
