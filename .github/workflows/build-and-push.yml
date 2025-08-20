@@ -17,12 +17,12 @@ jobs:
           - name: 'cloudflare'
             dockerfile: 'caddy-cloudflare/Dockerfile'
             context: 'caddy-cloudflare'
-          - name: 'cloudflare-ddns'
-            dockerfile: 'caddy-cloudflare-ddns/Dockerfile'
-            context: 'caddy-cloudflare-ddns'
-          - name: 'cloudflare-ddns-crowdsec'
-            dockerfile: 'caddy-cloudflare-ddns-crowdsec/Dockerfile'
-            context: 'caddy-cloudflare-ddns-crowdsec'
+          # - name: 'cloudflare-ddns'
+          #   dockerfile: 'caddy-cloudflare-ddns/Dockerfile'
+          #   context: 'caddy-cloudflare-ddns'
+          # - name: 'cloudflare-ddns-crowdsec'
+          #   dockerfile: 'caddy-cloudflare-ddns-crowdsec/Dockerfile'
+          #   context: 'caddy-cloudflare-ddns-crowdsec'
       fail-fast: false
 
     steps:
@@ -65,5 +65,5 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          # cache-from: type=gha
-          # cache-to: type=ghac,mode=max
+          cache-from: type=gha
+          cache-to: type=ghac,mode=max
