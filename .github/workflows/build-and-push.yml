@@ -1,20 +1,70 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Images
 
 on:
   workflow_dispatch:
   push:
     branches: [ main ]
+    paths:
+      - 'caddy-*/**'
+      - '.github/workflows/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        variant:
+          - name: 'cloudflare'
+            dockerfile: 'caddy-cloudflare/Dockerfile'
+            context: 'caddy-cloudflare'
+          - name: 'cloudflare-ddns'
+            dockerfile: 'caddy-cloudflare-ddns/Dockerfile'
+            context: 'caddy-cloudflare-ddns'
+          - name: 'cloudflare-ddns-crowdsec'
+            dockerfile: 'caddy-cloudflare-ddns-crowdsec/Dockerfile'
+            context: 'caddy-cloudflare-ddns-crowdsec'
+      fail-fast: false
+
     steps:
-      -
-        name: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
-      -
-        name: Parse Caddy version
-        run: echo "VERSION=$(grep -oP '(?<=FROM caddy:)[0-9]+\.[0-9]+\.[0-9]+' caddy-cloudflare/Dockerfile | head -n 1)"  >> $GITHUB_ENV
-      -
-        name: Print
-        run: echo ${{ env.VERSION }}
+
+      - name: Parse Caddy version
+        id: version
+        run: |
+          VERSION=$(grep -oP '(?<=FROM caddy:)[0-9]+\.[0-9]+\.[0-9]+' ${{ matrix.variant.dockerfile }} | head -n 1)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ghcr.io/${{ github.repository }}/caddy-${{ matrix.variant.name }}
+          tags: |
+            type=raw,value=latest
+            type=ref,event=branch
+            type=ref,event=tag
+            type=sha,format=long,prefix=sha-
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ matrix.variant.context }}
+          file: ${{ matrix.variant.dockerfile }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=ghac,mode=max
