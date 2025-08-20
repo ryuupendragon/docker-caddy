@@ -71,14 +71,16 @@ jobs:
             type=raw,value=${{ steps.version.outputs.version }}
             type=sha,format=long,prefix=sha-
             type=raw,value=latest
-          labels: |
-            org.opencontainers.image.title=Caddy with ${{ matrix.variant.name }} plugins
-            org.opencontainers.image.description=Caddy web server with ${{ matrix.variant.name }} plugins
-            org.opencontainers.image.version=${{ steps.version.outputs.version }}
-            org.opencontainers.image.url=https://github.com/${{ github.repository }}
-            org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            org.opencontainers.image.licenses=Apache-2.0
-            org.opencontainers.image.created=${{ steps.meta.outputs.date }}
+          labels: >
+            {
+              "org.opencontainers.image.title": "Caddy with ${{ matrix.variant.name }} plugins",
+              "org.opencontainers.image.description": "Caddy web server with ${{ matrix.variant.name }} plugins",
+              "org.opencontainers.image.version": "${{ steps.version.outputs.version }}",
+              "org.opencontainers.image.url": "https://github.com/${{ github.repository }}",
+              "org.opencontainers.image.source": "https://github.com/${{ github.repository }}",
+              "org.opencontainers.image.licenses": "Apache-2.0",
+              "org.opencontainers.image.created": "${{ steps.meta.outputs.date }}"
+            }
       - 
         name: Build and push
         uses: docker/build-push-action@v6.18.0
