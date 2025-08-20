@@ -22,12 +22,18 @@ jobs:
           - name: 'cloudflare'
             dockerfile: 'caddy-cloudflare/Dockerfile'
             context: 'caddy-cloudflare'
+          # - name: 'cloudflare-crowdsec'
+          #   dockerfile: 'caddy-cloudflare-crowdsec/Dockerfile'
+          #   context: 'caddy-cloudflare-crowdsec'
           # - name: 'cloudflare-ddns'
           #   dockerfile: 'caddy-cloudflare-ddns/Dockerfile'
           #   context: 'caddy-cloudflare-ddns'
           # - name: 'cloudflare-ddns-crowdsec'
           #   dockerfile: 'caddy-cloudflare-ddns-crowdsec/Dockerfile'
           #   context: 'caddy-cloudflare-ddns-crowdsec'
+          # - name: 'crowdsec'
+          #   dockerfile: 'caddy-crowdsec/Dockerfile'
+          #   context: 'caddy-crowdsec'
       fail-fast: false
 
     steps:
