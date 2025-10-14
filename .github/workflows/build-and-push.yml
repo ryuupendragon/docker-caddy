@@ -71,7 +71,7 @@ jobs:
         uses: docker/metadata-action@v5.8.0
         with:
           images: |
-            ghcr.io/${{ github.actor }}/caddy-${{ matrix.variant.name }}
+            ghcr.io/${{ vars.GH_USERNAME }}/caddy-${{ matrix.variant.name }}
             ${{ vars.DOCKERHUB_USERNAME }}/caddy-${{ matrix.variant.name }}
           tags: |
             type=raw,value=${{ steps.version.outputs.version }}
