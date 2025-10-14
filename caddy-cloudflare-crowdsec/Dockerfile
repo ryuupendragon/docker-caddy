@@ -6,6 +6,6 @@ RUN xcaddy build \
     --with github.com/hslatman/caddy-crowdsec-bouncer/layer4 \
     --with github.com/hslatman/caddy-crowdsec-bouncer/appsec
 
-FROM caddy:2.10.2@sha256:87aa104ed6c658991e1b0672be271206b7cd9fec452d1bf3ed9ad6f8ab7a2348
+FROM caddy:2.10.2@sha256:61a257991a7cca3d843218fb4a4eaf8b3241443fed67f43b5a2b56848237eba0
 
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
