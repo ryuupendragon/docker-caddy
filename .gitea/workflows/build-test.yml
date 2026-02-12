@@ -11,6 +11,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        variant:
+          - name: 'cloudflare'
+            dockerfile: 'caddy-cloudflare/Dockerfile'
+            context: 'caddy-cloudflare'
+          - name: 'crowdsec'
+            dockerfile: 'caddy-crowdsec/Dockerfile'
+            context: 'caddy-crowdsec'
+      fail-fast: false
+
     steps:
       - 
         name: Checkout code
@@ -44,7 +55,8 @@ jobs:
         uses: docker/metadata-action@v5.10.0
         with:
           images: |
-            ryuupendragon/caddy
+            ghcr.io/${{ vars.GH_USERNAME }}/caddy-${{ matrix.variant.name }}
+            ${{ vars.DOCKERHUB_USERNAME }}/caddy-${{ matrix.variant.name }}
           tags: |
             type=sha,format=long,prefix=sha-
             type=raw,value=latest
@@ -53,10 +65,10 @@ jobs:
             type=raw,value=${{ steps.version.outputs.version }},priority=1000
       - 
         name: Build Test
-        uses: docker/build-push-action@v6.18.0
+        uses: docker/build-push-action@v6.19.2
         with:
-          context: caddy-cloudflare
-          file: caddy-cloudflare/Dockerfile
+          context: ${{ matrix.variant.context }}
+          file: ${{ matrix.variant.dockerfile }}
           push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
