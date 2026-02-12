@@ -20,7 +20,7 @@ jobs:
           - name: 'crowdsec'
             dockerfile: 'caddy-crowdsec/Dockerfile'
             context: 'caddy-crowdsec'
-      fail-fast: false
+      fail-fast: true
 
     steps:
       - 
