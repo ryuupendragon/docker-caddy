@@ -52,7 +52,7 @@ jobs:
           echo "Major: $MAJOR, Minor: $MINOR"
       - 
         name: Set up QEMU
-        uses: docker/setup-qemu-action@v3.7.0
+        uses: docker/setup-qemu-action@v4.0.0
       - 
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3.12.0
