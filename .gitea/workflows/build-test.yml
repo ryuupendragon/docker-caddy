@@ -3,10 +3,10 @@ name: Build Test
 on:
   workflow_dispatch:
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
-      - 'caddy-*/**'
-      - '.gitea/workflows/**'
+      - "caddy-*/**"
+      - ".gitea/workflows/**"
 
 jobs:
   build:
@@ -14,43 +14,35 @@ jobs:
     strategy:
       matrix:
         variant:
-          - name: 'cloudflare'
-            dockerfile: 'caddy-cloudflare/Dockerfile'
-            context: 'caddy-cloudflare'
-          - name: 'crowdsec'
-            dockerfile: 'caddy-crowdsec/Dockerfile'
-            context: 'caddy-crowdsec'
+          - name: "cloudflare"
+            dockerfile: "caddy-cloudflare/Dockerfile"
+            context: "caddy-cloudflare"
       fail-fast: true
 
     steps:
-      - 
-        name: Checkout code
+      - name: Checkout code
         uses: actions/checkout@v6.0.3
-      - 
-        name: Parse Caddy version
+      - name: Parse Caddy version
         id: version
         run: |
           VERSION=$(grep -m 1 -Eo 'caddy:[0-9]+\.[0-9]+\.[0-9]' caddy-cloudflare/Dockerfile | cut -d ':' -f2)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Version from file: $VERSION"
-        
+
           # Extract semantic version parts
           MAJOR=$(echo $VERSION | cut -d. -f1)
           MINOR=$(echo $VERSION | cut -d. -f1-2)
-          
+
           echo "major_version=$MAJOR" >> $GITHUB_OUTPUT
           echo "minor_version=$MINOR" >> $GITHUB_OUTPUT
           echo "Major: $MAJOR, Minor: $MINOR"
-      - 
-        name: Set up QEMU
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v4.1.0
-      - 
-        name: Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4.1.0
         with:
           driver-opts: image=moby/buildkit:v0.23.2@sha256:ddd1ca44b21eda906e81ab14a3d467fa6c39cd73b9a39df1196210edcb8db59e
-      - 
-        name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v6.1.0
         with:
@@ -63,8 +55,7 @@ jobs:
             type=raw,value=${{ steps.version.outputs.major_version }}
             type=raw,value=${{ steps.version.outputs.minor_version }}
             type=raw,value=${{ steps.version.outputs.version }},priority=1000
-      - 
-        name: Build Test
+      - name: Build Test
         uses: docker/build-push-action@v7.2.0
         with:
           context: ${{ matrix.variant.context }}
