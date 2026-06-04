@@ -2,6 +2,7 @@ FROM caddy:2.11.4-builder@sha256:f2b98918658f949a3c533f2c73bd0806e3f2576ccf8eb18
 
 RUN xcaddy build \
     --with github.com/caddy-dns/cloudflare \
+    --with github.com/mholt/caddy-l4/modules/l4proxy \
     --with github.com/hslatman/caddy-crowdsec-bouncer/http \
     --with github.com/hslatman/caddy-crowdsec-bouncer/layer4 \
     --with github.com/hslatman/caddy-crowdsec-bouncer/appsec
