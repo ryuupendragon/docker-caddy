@@ -42,7 +42,7 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v4.1.0
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4.1.0
+        uses: docker/setup-buildx-action@v4.2.0
         with:
           driver-opts: image=moby/buildkit:v0.23.2@sha256:ddd1ca44b21eda906e81ab14a3d467fa6c39cd73b9a39df1196210edcb8db59e
       - name: Login to GitHub Container Registry
