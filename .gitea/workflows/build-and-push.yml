@@ -70,7 +70,7 @@ jobs:
             type=raw,value=${{ steps.version.outputs.minor_version }}
             type=raw,value=${{ steps.version.outputs.version }},priority=1000
       - name: Build and push
-        uses: docker/build-push-action@v7.2.0
+        uses: docker/build-push-action@v7.3.0
         with:
           context: ${{ matrix.variant.context }}
           file: ${{ matrix.variant.dockerfile }}
