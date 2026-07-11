@@ -71,7 +71,7 @@ jobs:
         with:
           context: ${{ matrix.variant.context }}
           file: ${{ matrix.variant.dockerfile }}
-          push: true
+          push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           # platforms: linux/amd64,linux/arm64
